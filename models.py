@@ -86,7 +86,7 @@ class DConvST(nn.Module):
         self.dconv = DeformableConvStandard(*list_dconv)
         self.st = STFusionResEach(list_s, list_t, resnet)
 
-    def forward(self, ctrl, x_dw, adj):  # ctrl param is xr
+    def forward(self, ctrl, x_dw, adj):  # ctrl is xr
         out = self.dconv(x_dw, ctrl)
         out = self.st(ctrl, out, adj)
         return out

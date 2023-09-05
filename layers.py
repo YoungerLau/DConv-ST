@@ -131,7 +131,9 @@ class GraphAttentionLayer(nn.Module):
         outputs = torch.cat([h.repeat(1, 1, N).view(B, N * N, -1), h.repeat(1, N, 1)], dim=2).view(B, N, -1,
                                                                                                    2 * self.out_c)
         outputs = self.leakyrelu(torch.matmul(outputs, self.a).squeeze(3)) * graph
-        outputs.data.masked_fill_(torch.eq(outputs, 0), -float(1e16))  # Make the places with 0 in outputs very small negative values
+        outputs.data.masked_fill_(torch.eq(outputs, 0), -float(1e16))
+        # Make the places with 0 in outputs very small negative values
+
         attention = self.F(outputs, dim=2)  # [B, N, N]
         return torch.bmm(attention, h) + self.b  # [B, N, N] * [B, N, D]
 
